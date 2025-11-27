@@ -1,0 +1,75 @@
+import {themes as prismThemes} from 'prism-react-renderer';
+
+const config = {
+  title: 'LINC Gallery',
+  staticDirectories: ['static'],
+  tagline: 'A showcase of the projects from the LINC center',
+  favicon: 'img/linc.logo.color+white.notext+square.png',
+
+  url: 'https://gallery.lincbrain.org',
+  baseUrl: '/',
+  organizationName: 'lincbrain',
+  projectName: 'gallery.lincbrain.org',
+
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en'],
+  },
+
+  presets: [
+    [
+      'classic',
+      ({
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      }),
+    ],
+  ],
+
+  themeConfig:
+    ({
+      navbar: {
+        logo: {
+          alt: 'Logo',
+          src: 'img/linc.logo.color+white.notext.png',
+        },
+        items: [
+          {to: '/pathways', label: 'Pathway Atlas', position: 'right'},
+          {to: '/dmri', label: 'High-resolution dMRI', position: 'right'},
+        ],
+      },
+      footer: {
+        style: 'light',
+        links: [
+          {
+            items: [
+              {
+                label: 'GitHub',
+                href: 'https://github.com/lincbrain/linc-gallery',
+              },
+            ],
+          },
+          {
+            items: [
+              {
+                html: `<div style="text-align: right;">© ${new Date().getFullYear()} LINC</div>`,
+              },
+            ],
+          },
+        ],
+      },
+      colorMode: {
+          defaultMode: 'light',
+          disableSwitch: true,
+        },
+      prism: {
+        theme: prismThemes.github,
+      },
+    }),
+};
+
+export default config;
