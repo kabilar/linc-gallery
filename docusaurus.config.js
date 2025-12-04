@@ -10,6 +10,8 @@ const config = {
   baseUrl: '/',
   organizationName: 'lincbrain',
   projectName: 'linc-gallery',
+  deploymentBranch: 'gh-pages',
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
