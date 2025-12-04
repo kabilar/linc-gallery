@@ -22,11 +22,12 @@ const config = {
   presets: [
     [
       'classic',
-      ({
+      {
         theme: {
           customCss: './src/css/custom.css',
         },
-      }),
+        docs: false,
+      },
     ],
   ],
 
