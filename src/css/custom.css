@@ -1,0 +1,77 @@
+/* Override the default Infima variables */
+:root {
+  --ifm-color-primary: rgb(120, 88, 188);
+}
+
+/* Homepage features */
+
+.heroBanner {
+  position: relative;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/img/homepage-temp.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0rem;
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  font-weight: lighter;
+  color: white;
+  margin-bottom: 5rem;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    min-height: calc(100vh - 50px);
+  }
+  
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+}
+
+
+/* Reduce footer height */
+.footer {
+  padding-top: 0rem;
+  padding-bottom: 0.75rem;
+}
+
+.footer__links {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
