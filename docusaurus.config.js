@@ -9,7 +9,7 @@ const config = {
   url: 'https://gallery.lincbrain.org',
   baseUrl: '/',
   organizationName: 'lincbrain',
-  projectName: 'gallery.lincbrain.org',
+  projectName: 'linc-gallery',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
