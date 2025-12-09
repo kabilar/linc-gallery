@@ -89,6 +89,24 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.neuroglancer-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-width: 95vw;
+  max-width: 95vw;
+  min-height: 90vh;
+  max-height: 90vh;
+}
+
+.neuroglancer-card iframe {
+  min-width: 93vw;
+  max-width: 93vw;
+  min-height: 80vh;
+  max-height: 80vh;
+}
+
 .resource-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -146,3 +164,10 @@
   }
 }
 
+/* Main content of each page */
+.container:not(.footer .container) {
+  max-width: 95vw !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
