@@ -28,15 +28,14 @@ export const PathwaysNiivueCanvas = () => (
       I: [0, 1, 255]
     };
     niivue_slice.current.addColormap('whiteBackgroundGray', whiteBackgroundGray);
+
+    const nucleiOpacity=1;
     const imageList = [
           {
             url:"img/mySTNAtlas/highb.mean.norm.brain.nii.gz",
             colormap: "whiteBackgroundGray",
           },
       ];
-    
-    await niivue_slice.current.loadVolumes(imageList);
-    const opacity=1;
     const trackList =[
         {
           url: "img/mySTNAtlas/STN-Atlas_merged.trk",
@@ -48,81 +47,83 @@ export const PathwaysNiivueCanvas = () => (
         },
         {
           url: "img/mySTNAtlas/sublabels1.gii",
-          name:"sublabels1.gii",
+          name: "sublabels1.gii",
           rgba255: [65, 94, 177, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels2.gii",
-          name:"sublabels2.gii",
+          name: "sublabels2.gii",
           rgba255: [154, 125, 133, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels3.gii",
-          name:"sublabels3.gii",
+          name: "sublabels3.gii",
           rgba255: [142, 161, 97, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels4.gii",
-          name:"sublabels4.gii",
+          name: "sublabels4.gii",
           rgba255: [164, 180, 246, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels5.gii",
-          name:"sublabels5.gii",
+          name: "sublabels5.gii",
           rgba255: [173, 182, 86, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels6.gii",
-          name:"sublabels6.gii",
+          name: "sublabels6.gii",
           rgba255: [197, 195, 223, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels7.gii",
-          name:"sublabels7.gii",
+          name: "sublabels7.gii",
           rgba255: [65, 178, 254, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels8.gii",
-          name:"sublabels8.gii",
+          name: "sublabels8.gii",
           rgba255: [113, 61, 186, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels9.gii",
-          name:"sublabels9.gii",
+          name: "sublabels9.gii",
           rgba255: [207, 73, 253, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels10.gii",
-          name:"sublabels10.gii",
+          name: "sublabels10.gii",
           rgba255: [153, 252, 171, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels11.gii",
-          name:"sublabels11.gii",
+          name: "sublabels11.gii",
           rgba255: [171, 252, 102, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
         {
           url: "img/mySTNAtlas/sublabels12.gii",
-          name:"sublabels12.gii",
+          name: "sublabels12.gii",
           rgba255: [60, 172, 225, 255],
-          opacity: opacity,
+          opacity: nucleiOpacity,
         },
       ]
+
     await niivue_render.current.loadMeshes(segmentationList);
-    
-    await niivue_slice.current.setMeshThicknessOn2D(1);
+    await niivue_slice.current.loadVolumes(imageList);
     await niivue_slice.current.loadMeshes(trackList);
+    await niivue_slice.current.setMeshThicknessOn2D(1);
+
     await niivue_slice.current.setSliceType(niivue_slice.current.sliceTypeCoronal);
     }
     loadImages();
