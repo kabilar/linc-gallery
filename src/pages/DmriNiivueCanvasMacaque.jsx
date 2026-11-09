@@ -2,12 +2,51 @@ import React, { useState } from "react";
 import { Niivue, DRAG_MODE } from "@niivue/niivue";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
+const imageListHighRes = [
+    {
+      name: "sub-M3_sample-brain_acq-HighRes+MultiShell_desc-CSD+fodf+l0.nii.gz",  
+      url: "https://dandiarchive.s3.amazonaws.com/blobs/e56/e59/e56e5984-8b5f-40dc-99f7-e2bda53cfd25",
+      opacity: 1,
+    },
+    {
+      name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+dec+univec.nii.gz",
+      url: "https://dandiarchive.s3.amazonaws.com/blobs/564/a89/564a89d2-cb11-4e4b-a881-282c1ffc54a4",
+      opacity: 1,
+    },
+    {
+      name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+dec+scalar.nii.gz",
+      url: "https://dandiarchive.s3.amazonaws.com/blobs/707/fa1/707fa179-20a3-4d5b-bce6-a5f574836417",
+      opacity: 0,
+      cal_min: 0,
+      cal_max: 0.9,
+    },
+    {
+      name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+tdi+univec.nii.gz",
+      url: "https://dandiarchive.s3.amazonaws.com/blobs/f98/4d4/f984d4eb-3159-4017-80c2-32d388d4fa5f",
+      opacity: 0,
+    },
+    {
+      name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+tdi+scalar.nii.gz",
+      url: "https://dandiarchive.s3.amazonaws.com/blobs/0e4/ef2/0e4ef272-96d6-4df4-a408-6344032cece1",
+      opacity: 0,
+      cal_min: 0,
+      cal_max: 1100,
+    },
+];
+
+// Only the high-res layers shown by default are loaded with the page. Tract
+// density is downloaded the first time it is switched on.
+const initialLayerCount = 3;
+
 export const DmriNiivueCanvasMacaque = () => (
     <BrowserOnly fallback={<div>Loading...</div>}>
   {() => {
 
   const niivue_highres = React.useRef(null);
   const niivue_lowres = React.useRef(null);
+  const initialLoad = React.useRef(null);
+  const deferredLoad = React.useRef(null);
+  const [isLoadingLayers, setIsLoadingLayers] = useState(false);
 
   React.useEffect(() => {
     async function loadImages() {
@@ -30,37 +69,6 @@ export const DmriNiivueCanvasMacaque = () => (
         niivue_highres.current.attachToCanvas(document.getElementById('niivue-canvas-slice-macaque-highres'))
         niivue_lowres.current.attachToCanvas(document.getElementById('niivue-canvas-slice-macaque-lowres'))
 
-        const imageListHighRes = [
-            {
-              name: "sub-M3_sample-brain_acq-HighRes+MultiShell_desc-CSD+fodf+l0.nii.gz",  
-              url: "https://dandiarchive.s3.amazonaws.com/blobs/e56/e59/e56e5984-8b5f-40dc-99f7-e2bda53cfd25",
-              opacity: 1,
-            },
-            {
-              name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+dec+univec.nii.gz",
-              url: "https://dandiarchive.s3.amazonaws.com/blobs/564/a89/564a89d2-cb11-4e4b-a881-282c1ffc54a4",
-              opacity: 1,
-            },
-            {
-              name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+dec+scalar.nii.gz",
-              url: "https://dandiarchive.s3.amazonaws.com/blobs/707/fa1/707fa179-20a3-4d5b-bce6-a5f574836417",
-              opacity: 0,
-              cal_min: 0,
-              cal_max: 0.9,
-            },
-            {
-              name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+tdi+univec.nii.gz",
-              url: "https://dandiarchive.s3.amazonaws.com/blobs/f98/4d4/f984d4eb-3159-4017-80c2-32d388d4fa5f",
-              opacity: 0,
-            },
-            {
-              name: "sub-M3_sample-Brain_acq-HighRes+MultiShell_desc-CSD+tdi+scalar.nii.gz",
-              url: "https://dandiarchive.s3.amazonaws.com/blobs/0e4/ef2/0e4ef272-96d6-4df4-a408-6344032cece1",
-              opacity: 0,
-              cal_min: 0,
-              cal_max: 1100,
-            },
-        ];
         const imageListLowRes = [
             {
               name: "sub-M3_sample-Brain_acq-MultiDim_desc-T2w.nii.gz",
@@ -114,12 +122,10 @@ export const DmriNiivueCanvasMacaque = () => (
           niivue_lowres.current.volumes[i].colorbarVisible = false;
         }
 
-        await niivue_highres.current.loadVolumes(imageListHighRes);
+        await niivue_highres.current.loadVolumes(imageListHighRes.slice(0, initialLayerCount));
         await niivue_highres.current.volumes[1].loadImgV1();
-        await niivue_highres.current.volumes[3].loadImgV1();
         niivue_highres.current.setInterpolation(true); // V1 lines require nearest neighbor interpolation
         niivue_highres.current.setModulationImage(niivue_highres.current.volumes[1].id, niivue_highres.current.volumes[2].id)
-        niivue_highres.current.setModulationImage(niivue_highres.current.volumes[3].id, niivue_highres.current.volumes[4].id)
         for (let i = 0; i < niivue_highres.current.volumes.length; i++) {
           niivue_highres.current.volumes[i].colorbarVisible = false;
         }
@@ -130,9 +136,9 @@ export const DmriNiivueCanvasMacaque = () => (
       }
 
     // Load only when the tab is first shown, not at page load
-    const tabPanel = document.getElementById('niivue-canvas-slice-macaque')?.closest('[role="tabpanel"]');
+    const tabPanel = document.getElementById('niivue-canvas-slice-macaque-highres')?.closest('[role="tabpanel"]');
     if (!tabPanel || !tabPanel.hasAttribute('hidden')) {
-      loadImages();
+      initialLoad.current = loadImages();
       return;
     }
 
@@ -140,7 +146,7 @@ export const DmriNiivueCanvasMacaque = () => (
     const observer = new MutationObserver(() => {
       if (!tabPanel.hasAttribute('hidden')) {
         observer.disconnect();
-        loadImages();
+        initialLoad.current = loadImages();
       }
     });
     observer.observe(tabPanel, { attributes: true, attributeFilter: ['hidden'] });
@@ -166,6 +172,32 @@ export const DmriNiivueCanvasMacaque = () => (
     }
   }, [showLowResCanvas]);
 
+  // Download the tract density layers once, the first time they are needed.
+  // They are appended in list order, so they keep indices 3-4.
+  const loadDeferredLayers = () => {
+    if (!deferredLoad.current) {
+      setIsLoadingLayers(true);
+      deferredLoad.current = (async () => {
+        try {
+          await initialLoad.current;
+          const nv = niivue_highres.current;
+          await nv.addVolumesFromUrl(imageListHighRes.slice(initialLayerCount));
+          await nv.volumes[3].loadImgV1();
+          nv.setModulationImage(nv.volumes[3].id, nv.volumes[4].id);
+          for (let i = initialLayerCount; i < nv.volumes.length; i++) {
+            nv.volumes[i].colorbarVisible = false;
+          }
+        } catch (error) {
+          deferredLoad.current = null; // allow a retry on the next toggle
+          throw error;
+        } finally {
+          setIsLoadingLayers(false);
+        }
+      })();
+    }
+    return deferredLoad.current;
+  };
+
   const handleMRIChange = (event) => {
       const mriState = event.target.checked;
       niivue_highres.current.volumes[0].opacity = mriState ? 1 : 0;
@@ -178,11 +210,12 @@ export const DmriNiivueCanvasMacaque = () => (
       niivue_highres.current.updateGLVolume();
       setIsFODF(fodfState);
     };
-  const handleDensityChange = (event) => {
+  const handleDensityChange = async (event) => {
       const densityState = event.target.checked;
+      setIsDensity(densityState);
+      await loadDeferredLayers();
       niivue_highres.current.volumes[3].opacity = densityState ? 1 : 0;
       niivue_highres.current.updateGLVolume();
-      setIsDensity(densityState);
     };
   const handleSomaChange = (event) => {
       const somaState = event.target.checked;
@@ -243,6 +276,11 @@ export const DmriNiivueCanvasMacaque = () => (
         <aside class="sidebar-container">
           <div class="global-controls">
             <h4>Layers</h4>
+            {isLoadingLayers && (
+              <div style={{ fontSize: "0.8em", color: "#888", marginBottom: "4px" }}>
+                Loading layers...
+              </div>
+            )}
             <div style={{ fontSize: "0.8em", fontStyle: "italic", color: "#888", marginBottom: "4px" }}>
               Axonal architecture
             </div>
