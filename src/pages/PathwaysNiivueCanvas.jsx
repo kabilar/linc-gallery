@@ -482,6 +482,55 @@ export const PathwaysNiivueCanvas = () => (
     if (rotateIntervalRef.current) clearInterval(rotateIntervalRef.current);
   }, []);
 
+  // Pan the 3D render view with a middle- or right-button drag. Niivue only
+  // pans 2D slices, so offset the scene through its `position` translation,
+  // which is applied in view space (before rotation) when building the 3D
+  // model matrix.
+  React.useEffect(() => {
+    const canvas = document.getElementById('niivue-canvas-render');
+    if (!canvas) return undefined;
+    let panStart = null;
+
+    const onMouseDown = (event) => {
+      if (event.button !== 1 && event.button !== 2) return;
+      if (!niivue_render.current) return;
+      event.preventDefault(); // suppress the browser's middle-click autoscroll
+      const position = niivue_render.current.position ?? [0, 0, 0];
+      panStart = { x: event.clientX, y: event.clientY, position: [...position] };
+    };
+
+    const onMouseMove = (event) => {
+      const nv = niivue_render.current;
+      if (!panStart || !nv) return;
+      // Convert the drag from screen pixels to scene units, matching the
+      // half-extent of niivue's orthographic projection along the shorter side
+      const halfExtent = (0.8 * nv.furthestFromPivot) / nv.scene.volScaleMultiplier;
+      const rect = canvas.getBoundingClientRect();
+      const unitsPerPixel = (2 * halfExtent) / Math.min(rect.width, rect.height);
+      const dx = (event.clientX - panStart.x) * unitsPerPixel;
+      const dy = (event.clientY - panStart.y) * unitsPerPixel;
+      // The model matrix mirrors x, and screen y points down, so both offsets
+      // are negated for the scene to follow the pointer
+      nv.position = [
+        panStart.position[0] - dx,
+        panStart.position[1] - dy,
+        panStart.position[2],
+      ];
+      nv.drawScene();
+    };
+
+    const onMouseUp = () => { panStart = null; };
+
+    canvas.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      canvas.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
+
   const [tractVisibility, setTractVisibility] = useState(
     trackList.map(() => true)
   );
@@ -696,6 +745,24 @@ export const PathwaysNiivueCanvas = () => (
                     <td style={{ padding: '6px', borderTop: 'none', borderBottom: 'none', borderLeft: 'none', borderRight: '1px solid var(--ifm-color-emphasis-300)', background: 'var(--ifm-background-color)' }}>Zoom</td>
                     <td style={{ padding: '6px', border: 'none', background: 'var(--ifm-background-color)' }}>Right click</td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <hr />
+              <h4>3D View Mouse Controls</h4>
+              <table style={{ width: '100%', fontSize: '0.9em' }}>
+                <tbody>
+                  {[
+                    ["Rotate", "Left click"],
+                    ["Zoom", "Scroll wheel"],
+                    ["Pan", "Middle or right click"],
+                  ].map(([action, control]) => (
+                    <tr key={action} style={{ border: 'none' }}>
+                      <td style={{ padding: '6px', border: 'none', borderRight: '1px solid var(--ifm-color-emphasis-300)', background: 'var(--ifm-background-color)' }}>{action}</td>
+                      <td style={{ padding: '6px', border: 'none', background: 'var(--ifm-background-color)' }}>{control}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
