@@ -7,7 +7,6 @@
 //   url                          - optional link, used instead of the DOI link
 //   type                         - 'article' | 'preprint' | 'conference'
 //   galleryPage, galleryLabel    - set for manuscripts featured on a gallery page
-//   citation                     - short citation shown on the featured cards
 
 export const publications = [
   {
@@ -19,7 +18,6 @@ export const publications = [
     type: 'preprint',
     galleryPage: '/dmri',
     galleryLabel: 'Diffusion MRI',
-    citation: 'Gong et al., bioRxiv 2026',
   },
   {
     title: 'Hierarchical X-ray microscopy and mesoscopic diffusion MRI in the same brain reveal the human connectome across scales',
@@ -30,7 +28,6 @@ export const publications = [
     type: 'preprint',
     galleryPage: '/mri-xray',
     galleryLabel: 'MRI & X-ray',
-    citation: 'Chourrout et al., bioRxiv 2026',
   },
   {
     title: 'A human subcortical connectome at 400 μm resolution',
@@ -41,7 +38,6 @@ export const publications = [
     type: 'preprint',
     galleryPage: '/pathways',
     galleryLabel: 'Pathway Atlas',
-    citation: 'Maffei et al., bioRxiv 2026',
   },
   {
     title: 'Domain-randomized synthetic data for zero-shot 3D axon segmentation in light-sheet microscopy',
@@ -52,7 +48,6 @@ export const publications = [
     type: 'preprint',
     galleryPage: '/axon-segmentation',
     galleryLabel: 'Axon Segmentation',
-    citation: 'Gaibor et al., arXiv 2026',
   },
   {
     title: "The modular nature of long-association pathways in the human brain",

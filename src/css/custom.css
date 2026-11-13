@@ -284,25 +284,6 @@ input[type="radio"] {
   max-width: 1100px;
 }
 
-.publication-feature {
-  display: flex;
-  flex-direction: column;
-}
-
-.publication-feature > p:last-child {
-  margin-top: auto;
-  margin-bottom: 0;
-}
-
-.publication-feature-title {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.publication-feature-ref {
-  margin-bottom: 0.5rem;
-}
-
 .publication-controls {
   display: flex;
   flex-wrap: wrap;

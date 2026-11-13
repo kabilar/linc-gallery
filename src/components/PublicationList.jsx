@@ -61,26 +61,6 @@ function PublicationItem({ pub }) {
   );
 }
 
-export function FeaturedPublications() {
-  const featured = publications.filter((pub) => pub.galleryPage);
-  return (
-    <div className="resource-cards">
-      {featured.map((pub) => (
-        <div className="resource-card publication-feature" key={pub.title}>
-          <h3>{pub.galleryLabel}</h3>
-          <p className="publication-feature-title">{pub.title}</p>
-          <p className="publication-feature-ref">
-            <a href={publicationUrl(pub)} target="_blank" rel="noopener noreferrer">
-              {pub.citation ?? `${pub.authors}, ${pub.venue} ${pub.year}`}
-            </a>
-          </p>
-          <p><Link to={pub.galleryPage}>Explore in the gallery →</Link></p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export function PublicationList() {
   const [query, setQuery] = useState('');
   const [type, setType] = useState('all');
