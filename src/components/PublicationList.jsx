@@ -69,7 +69,6 @@ function PublicationItem({ pub }) {
           <span className={`publication-badge publication-badge--${pub.type}`}>
             {TYPE_LABELS[pub.type] ?? pub.type}
           </span>
-          {pub.doi && <span className="publication-doi">doi:{pub.doi}</span>}
         </div>
       </div>
       {pub.galleryPage && <GalleryLink pub={pub} />}

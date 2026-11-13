@@ -437,11 +437,6 @@ input[type="radio"] {
   }
 }
 
-.publication-doi {
-  color: var(--ifm-color-emphasis-600);
-  word-break: break-all;
-}
-
 .publications-page > .resource-cards {
   margin-top: 2.5rem;
 }
