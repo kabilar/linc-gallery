@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import Link from '@docusaurus/Link';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import { publications } from '../data/publications';
 
 const TYPE_LABELS = {
@@ -34,29 +36,43 @@ function matchesQuery(pub, query) {
     .every((term) => haystack.includes(term));
 }
 
+function GalleryLink({ pub }) {
+  const logo = {
+    light: useBaseUrl('/img/linc.logo.color+white.alpha.notext.png'),
+    dark: useBaseUrl('/img/linc.logo.color+black.alpha.notext.png'),
+  };
+  return (
+    <Link className="publication-gallery-link" to={pub.galleryPage}>
+      <ThemedImage className="publication-gallery-logo" alt="" sources={logo} />
+      <span className="publication-gallery-text">
+        <span className="publication-gallery-caption">Explore in the gallery</span>
+        <span className="publication-gallery-label">{pub.galleryLabel} →</span>
+      </span>
+    </Link>
+  );
+}
+
 function PublicationItem({ pub }) {
   const href = publicationUrl(pub);
   return (
     <li className="publication-item">
-      <div className="publication-title">
-        {href ? <a href={href} target="_blank" rel="noopener noreferrer">{pub.title}</a> : pub.title}
+      <div className="publication-body">
+        <div className="publication-title">
+          {href ? <a href={href} target="_blank" rel="noopener noreferrer">{pub.title}</a> : pub.title}
+        </div>
+        <div className="publication-meta">
+          {pub.authors && <span>{pub.authors}</span>}
+          {pub.venue && <span className="publication-venue">{pub.venue}</span>}
+          {pub.year && <span>{pub.year}</span>}
+        </div>
+        <div className="publication-badges">
+          <span className={`publication-badge publication-badge--${pub.type}`}>
+            {TYPE_LABELS[pub.type] ?? pub.type}
+          </span>
+          {pub.doi && <span className="publication-doi">doi:{pub.doi}</span>}
+        </div>
       </div>
-      <div className="publication-meta">
-        {pub.authors && <span>{pub.authors}</span>}
-        {pub.venue && <span className="publication-venue">{pub.venue}</span>}
-        {pub.year && <span>{pub.year}</span>}
-      </div>
-      <div className="publication-badges">
-        <span className={`publication-badge publication-badge--${pub.type}`}>
-          {TYPE_LABELS[pub.type] ?? pub.type}
-        </span>
-        {pub.galleryPage && (
-          <Link className="publication-gallery-link" to={pub.galleryPage}>
-            Explore {pub.galleryLabel} in the gallery →
-          </Link>
-        )}
-        {pub.doi && <span className="publication-doi">doi:{pub.doi}</span>}
-      </div>
+      {pub.galleryPage && <GalleryLink pub={pub} />}
     </li>
   );
 }
