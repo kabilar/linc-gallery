@@ -376,14 +376,8 @@ input[type="radio"] {
   color: #f0c870;
 }
 
-.publication-badge--gallery {
-  border-color: var(--ifm-color-primary);
-  color: var(--ifm-color-primary);
-}
-
-[data-theme='dark'] .publication-badge--gallery {
-  border-color: #b8a3e8;
-  color: #c9b8f0;
+.publication-gallery-link {
+  font-weight: 600;
 }
 
 .publication-doi {

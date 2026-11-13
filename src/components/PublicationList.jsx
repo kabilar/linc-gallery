@@ -51,8 +51,8 @@ function PublicationItem({ pub }) {
           {TYPE_LABELS[pub.type] ?? pub.type}
         </span>
         {pub.galleryPage && (
-          <Link className="publication-badge publication-badge--gallery" to={pub.galleryPage}>
-            Featured in the gallery: {pub.galleryLabel}
+          <Link className="publication-gallery-link" to={pub.galleryPage}>
+            Explore {pub.galleryLabel} in the gallery →
           </Link>
         )}
         {pub.doi && <span className="publication-doi">doi:{pub.doi}</span>}
